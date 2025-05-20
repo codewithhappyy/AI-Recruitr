@@ -14,7 +14,7 @@ export default function Login() {
       if(result.data.message === 'Success'){
         // Optionally store token: localStorage.setItem('token', result.data.token);
         localStorage.setItem('token', result.data.token);
-        navigate('/profileEdit');
+        navigate('/home');
       } else {
         alert('Login failed');
       }

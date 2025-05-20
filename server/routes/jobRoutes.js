@@ -50,12 +50,19 @@ router.post('/job-matches', async (req, res) => {
         Preferred Job Type: ${userDetails.preferredJobType}
         
         Please provide:
-        1. Job Title
-        2. Company Name
-        4. Array of Skills required
-        5. salary in integer
+        1. JobTitle
+        2. CompanyName
+        4. Skills 
+        5. SalaryInt
         
-        Format each suggestion clearly with numbering.
+        Format must be  JSON array of objects like 
+            {
+                JobTitle: "",
+                CompanyName: "",
+                Skills:"",
+                SalaryInt:""
+            }
+
         `;
         
             // Call the Gemini API

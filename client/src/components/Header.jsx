@@ -9,13 +9,12 @@ export default function Header() {
     navigate('/');
   };
 
-  const handleMatches = async () =>{
+  const handleMatches = async () => {
     const token = localStorage.getItem('token');
     try {
       const userProfile = await axios.get('http://localhost:5020/api/user', {
-        headers: { authorization: `Bearer ${token}`}
+        headers: { authorization: `Bearer ${token}` }
       });
-      console.log(userProfile.data);
       if (!userProfile) {
         alert('User profile not found.');
         return;
@@ -25,10 +24,13 @@ export default function Header() {
       });
       const matches = response.data;
 
-      console.log(matches);
-      navigate('/recommendedJobs', { matches })
-      // Redirect to /matches and pass matches as state
-      // navigate('/matches', { state: { matches } }); 
+      const match = matches.match(/\[([\s\S]*?)\]/);
+
+      if (match) {
+        const arrayContent = `[${match[1]}]`;
+        const jobs = JSON.parse(arrayContent);
+        navigate('/recommendedJobs', { state: { jobs } })
+      }
     } catch (error) {
       alert('Failed to fetch job matches.');
     }

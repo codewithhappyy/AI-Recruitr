@@ -29,7 +29,7 @@ export default function Register() {
     try {
       await axios.post('http://localhost:5020/register', formData);
       console.log('Registration successful!');
-      navigate('/login');
+      navigate('/profileEdit');
     } catch (err) {
       console.log('Registration failed');
       console.log(err);
