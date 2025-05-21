@@ -22,17 +22,16 @@ export default function Register() {
     e.preventDefault();
   
     if (formData.password !== formData.confirmPassword) {
-      console.log('Passwords do not match');
+      alert('Passwords do not match');
       return;
     }
   
     try {
       await axios.post('http://localhost:5020/register', formData);
       console.log('Registration successful!');
-      navigate('/profileEdit');
+      navigate('/');
     } catch (err) {
-      console.log('Registration failed');
-      console.log(err);
+      alert(err.response.data.error);
     }
   };
   

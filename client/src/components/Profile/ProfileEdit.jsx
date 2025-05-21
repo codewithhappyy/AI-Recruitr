@@ -27,7 +27,7 @@ export default function ProfileEdit() {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const res = await axios.get('http://localhost:5020/api/user/profile', {
+        const res = await axios.get('http://localhost:5020/api/user', {
           headers: { Authorization: `Bearer ${token}` }
         });
         const profileData = {
