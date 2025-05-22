@@ -1,27 +1,28 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import axios from 'axios';
 
 export default function Header() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    localStorage.removeItem('profileForm');
     navigate('/');
   };
 
   const handleMatches = async () => {
-    const token = localStorage.getItem('token');
     try {
-      const userProfile = await axios.get('http://localhost:5020/api/user', {
-        headers: { authorization: `Bearer ${token}` }
+      setIsLoading(true);
+      const token = localStorage.getItem('token');
+      const email = localStorage.getItem('email');
+      const response = await axios.get('http://localhost:5020/api/job_matches', {
+        headers: { authorization: `bearer ${token}` },
+        params: { email: email }
       });
-      if (!userProfile) {
-        alert('User profile not found.');
-        return;
-      }
-      const response = await axios.post('http://localhost:5020/api/job-matches', userProfile.data, {
-        headers: { authorization: `bearer ${token}` }
-      });
+
       const matches = response.data;
 
       const match = matches.match(/\[([\s\S]*?)\]/);
@@ -33,6 +34,8 @@ export default function Header() {
       }
     } catch (error) {
       alert('Failed to fetch job matches.');
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -55,13 +58,30 @@ export default function Header() {
           >
             <span className="inline-block mr-1">👤</span> Profile
           </button>
+          
           <button
             onClick={handleMatches}
-            className="text-xl text-white px-4 py-2 rounded-md transition-all duration-200 font-semibold hover:bg-white/20 active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+            disabled={isLoading}
+            className="text-xl text-white px-4 py-2 rounded-md transition-all duration-200 font-semibold hover:bg-white/20 active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-300 relative"
             type="button"
           >
-            <span className="inline-block mr-1">🔍</span> Find My Matches
+            {isLoading ? (
+              <>
+                <span className="inline-block mr-1">⏳</span>
+                <span className="loading-dots">
+                  <span className="dot">.</span>
+                  <span className="dot">.</span>
+                  <span className="dot">.</span>
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="inline-block mr-1">🔍</span> 
+                Find My Matches
+              </>
+            )}
           </button>
+
           <button
             onClick={handleLogout}
             className="text-xl text-white px-4 py-2 rounded-md transition-all duration-200 font-semibold hover:bg-red-500/80 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-300"
@@ -71,6 +91,17 @@ export default function Header() {
           </button>
         </div>
       </header>
+
+      {/* Loading overlay */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+            <p className="text-lg font-semibold">Analyzing your profile...</p>
+            <p className="text-sm text-gray-600">Finding the perfect job matches for you</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

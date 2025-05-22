@@ -5,7 +5,6 @@ export const JobMatches = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const matches = location.state.jobs || [];
-  console.log(matches)
   if (!matches.length) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">

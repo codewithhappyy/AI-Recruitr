@@ -1,21 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode'
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-
-  const logoutWhenExpired = (token) => {
-  const decoded = jwtDecode(token);
-  const expiresIn = decoded.exp * 1000 - Date.now();
-  setTimeout(() => {
-    localStorage.removeItem('token');
-    window.location.href = '/';
-  }, expiresIn);
-};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,8 +13,8 @@ export default function Login() {
       const result = await axios.post('http://localhost:5020/login', { email, password });
       if(result.data.message === 'Success'){
         // Optionally store token: localStorage.setItem('token', result.data.token);
+        localStorage.setItem('email', email);
         localStorage.setItem('token', result.data.token);
-        logoutWhenExpired(result.data.token);
         navigate('/home');
       } else {
         alert('Login failed');

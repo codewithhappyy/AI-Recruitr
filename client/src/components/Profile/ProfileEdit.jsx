@@ -17,35 +17,12 @@ export default function ProfileEdit() {
   const token = localStorage.getItem('token');
   const [form, setForm] = useState({
     name: "",
+    email: "",
     location: "",
     experience: "",
     skills: [],
     jobType: ""
   });
-
-  // Fetch user details and prefill form
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const res = await axios.get('http://localhost:5020/api/user', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        const profileData = {
-          name: res.data.name || "",
-          location: res.data.location || "",
-          experience: res.data.experience || "",
-          skills: res.data.skills || [],
-          jobType: res.data.jobType || ""
-        };
-
-        setForm(profileData);
-
-      } catch (err) {
-        console.error('Failed to fetch user details', err);
-      }
-    };
-    fetchUserDetails();
-  }, [token]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -67,7 +44,14 @@ export default function ProfileEdit() {
     try {
       await axios.post(
         'http://localhost:5020/profileUpdate',
-        form,
+        {
+          name: form.name,
+          email: form.email,
+          location: form.location,
+          experience: parseInt(form.experience),
+          skills: form.skills,
+          jobType: form.jobType
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -104,6 +88,20 @@ export default function ProfileEdit() {
               onChange={handleChange}
               className="w-full p-3 rounded-xl bg-white/80 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition transform hover:scale-105"
               placeholder="Enter your name"
+              required
+            />
+          </div>
+
+          {/* Email */}
+          <div className="mb-5">
+            <label className="block text-lg font-semibold text-gray-700 mb-2">Email</label>
+            <input
+              type="text"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full p-3 rounded-xl bg-white/80 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition transform hover:scale-105"
+              placeholder="Enter your email"
               required
             />
           </div>

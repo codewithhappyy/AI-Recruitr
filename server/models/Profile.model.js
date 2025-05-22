@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 
 const ProfileSchema = new mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
+    email: {
+        type: String,
+        unique: true, // ensures email is unique in the collection
+        required: true, // (optional but recommended)
+        lowercase: true, // normalizes the email
+        trim: true // removes leading/trailing whitespace
     },
     name: String,
     location: String,

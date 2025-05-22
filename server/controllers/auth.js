@@ -16,10 +16,6 @@ export const register = async (req, res) => {
     await user.save();
     res.json(user);
   } catch (err) {
-    if(err.code === 11000) {
-      //MongoDB duplicate key error code
-      return res.status(400).json({ error: "Eamil already registered."})
-    }
     res.status(500).json({ error: err.message });
   }
 };
@@ -33,7 +29,7 @@ export const login = async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) return res.status(401).send('Invalid Credentials');
 
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '12h' });
     res.json({ message: 'Success', token });
     
   } catch (err) {

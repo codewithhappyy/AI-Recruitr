@@ -9,6 +9,7 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const [user, setUser] = useState({
     name: "",
+    email: "",
     location: "",
     experience: "",
     skills: [],
@@ -20,8 +21,11 @@ export default function ProfilePage() {
       const token = localStorage.getItem('token');
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get('http://localhost:5020/api/user', {
-          headers: { Authorization: `Bearer ${token}` }
+        const email = localStorage.getItem("email");
+
+        const res = await axios.get('http://localhost:5020/api/profile_data', {
+          headers: { Authorization: `Bearer ${token}` }, 
+          params: { email: email }
         });
         setUser(res.data);
       } catch (error) {
@@ -48,6 +52,9 @@ export default function ProfilePage() {
 
         {/* User Details */}
         <h2 className="text-2xl font-bold text-gray-800 mb-2">{user?.name || "Your Name"}</h2>
+        <div className="text-gray-600 mb-1">
+          <span className="font-semibold">Email:</span> {user?.email || "Unknown"}
+        </div>
         <div className="text-gray-600 mb-1">
           <span className="font-semibold">Location:</span> {user?.location || "Unknown"}
         </div>

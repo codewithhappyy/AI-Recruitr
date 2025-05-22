@@ -15,8 +15,8 @@ app.use(cors());
 // Routes
 app.post('/register', register);
 app.post('/login', login);
-app.post('/profileUpdate',auth,  updateProfile);
-app.use('/api', auth, jobRoutes);
+app.post('/profileUpdate', auth,  updateProfile);
+app.use('/api',auth, jobRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

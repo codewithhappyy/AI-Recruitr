@@ -3,7 +3,7 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Home from './pages/homePage.jsx'
 import ProfileEdit from './components/Profile/ProfileEdit.jsx'
-import ProtectedRoute from './components/protectedRoutes.jsx';
+import ProtectedRoute from './components/Auth/protectedRoutes.jsx';
 import JobDescription from './components/jobDetails.jsx';
 import ProfilePage from './components/Profile/Profile.jsx';
 import { JobMatches } from './components/RecommendedJobs.jsx';
